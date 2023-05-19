@@ -1,0 +1,32 @@
+version: '3'
+services:
+  todos-api:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: todos-api
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+
+  mongodb_todos:
+    image: mongo
+    container_name: mongodb_todos
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prisma
+      INIT_WAIT_SEC: 3
+    ports:
+      - 27017:27017
+    volumes:
+      - todos:/data/db
+
+volumes:
+  todos:
